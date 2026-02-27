@@ -1,10 +1,10 @@
-package fr.univ_smb.info803.maturitymodelsassessmentsg2api;
+package fr.univ_smb.info803.maturitymodelsassessmentsapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MaturityModelsAssessmentsG2ApiApplicationTests {
+class MaturityModelsAssessmentsApplicationTests {
 
     @Test
     void contextLoads() {

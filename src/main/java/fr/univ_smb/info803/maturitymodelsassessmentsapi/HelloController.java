@@ -1,4 +1,4 @@
-package fr.univ_smb.info803.maturitymodelsassessmentsg2api;
+package fr.univ_smb.info803.maturitymodelsassessmentsapi;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package fr.univ_smb.info803.maturitymodelsassessmentsg2api;
+package fr.univ_smb.info803.maturitymodelsassessmentsapi;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Bean;
 import java.util.Arrays;
 
 @SpringBootApplication
-public class MaturityModelsAssessmentsG2ApiApplication {
+public class MaturityModelsAssessmentsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MaturityModelsAssessmentsG2ApiApplication.class, args);
+        SpringApplication.run(MaturityModelsAssessmentsApplication.class, args);
     }
 
     @Bean
