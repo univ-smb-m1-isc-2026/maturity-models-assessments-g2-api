@@ -9,6 +9,6 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: root
-      POSTGRES_USER: root
-      POSTGRES_DB: mma_db
+      POSTGRES_PASSWORD: mmag2
+      POSTGRES_USER: mmag2_root
+      POSTGRES_DB: mmmag234!
