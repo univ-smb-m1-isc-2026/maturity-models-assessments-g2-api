@@ -20,14 +20,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Maven Build
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '25'
           cache: 'maven'
 
-      - name: Maven Build
+      - name: Maven Package
         run: mvn -B package -DskipTests --file pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
