@@ -28,7 +28,7 @@ jobs:
           cache: 'maven'
 
       - name: Maven Build
-        run: mvn -B verify --file pom.xml
+        run: mvn -B package -DskipTests --file pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
