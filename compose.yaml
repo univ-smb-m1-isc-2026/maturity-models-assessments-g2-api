@@ -1,0 +1,5 @@
+services:
+  mma-g2-api:
+    build: .
+    ports:
+      - "8080:8080"
