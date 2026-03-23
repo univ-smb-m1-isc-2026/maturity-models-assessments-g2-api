@@ -9,15 +9,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "sessions")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Session {
 
-    @Id
-    private String id = UUID.randomUUID().toString();
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "model_id")

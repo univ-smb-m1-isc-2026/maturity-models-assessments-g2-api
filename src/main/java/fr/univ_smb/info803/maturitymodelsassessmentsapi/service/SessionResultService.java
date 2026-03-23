@@ -14,9 +14,9 @@ public class SessionResultService {
 
     private final SessionResultRepository sessionResultRepository;
 
-    public List<SessionResult> getBySessionId(String sessionId){ return sessionResultRepository.findBySessionId(sessionId); }
+    public List<SessionResult> getBySessionId(Long sessionId){ return sessionResultRepository.findBySessionId(sessionId); }
 
-    public Optional<SessionResult> getBySessionIdAndUserId(String sessionId, Long userId){ return sessionResultRepository.findBySessionIdAndUserId(sessionId, userId); }
+    public Optional<SessionResult> getBySessionIdAndUserId(Long sessionId, Long userId){ return sessionResultRepository.findBySessionIdAndUserId(sessionId, userId); }
 
     public Optional<SessionResult> getSessionResult(final Long id){ return sessionResultRepository.findById(id); }
 

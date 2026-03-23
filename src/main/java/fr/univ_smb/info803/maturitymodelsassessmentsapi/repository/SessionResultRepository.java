@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SessionResultRepository extends JpaRepository<SessionResult, Long> {
-    List<SessionResult> findBySessionId(String sessionId);
-    Optional<SessionResult> findBySessionIdAndUserId(String sessionId, Long userId);
+    List<SessionResult> findBySessionId(Long sessionId);
+    Optional<SessionResult> findBySessionIdAndUserId(Long sessionId, Long userId);
 }

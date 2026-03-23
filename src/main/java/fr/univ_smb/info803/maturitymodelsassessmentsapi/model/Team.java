@@ -31,6 +31,7 @@ public class Team {
             joinColumns = @JoinColumn(name = "team_id"),       // FK vers la table Team
             inverseJoinColumns = @JoinColumn(name = "user_id") // FK vers la table User
     )
+    @Builder.Default
     private List<User> members = new ArrayList<>();
 
     @CreationTimestamp

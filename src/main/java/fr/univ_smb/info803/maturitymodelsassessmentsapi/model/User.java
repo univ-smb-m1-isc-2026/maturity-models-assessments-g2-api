@@ -34,6 +34,7 @@ public class User {
 
     @ManyToMany(mappedBy = "members")
     @JsonIgnore
+    @Builder.Default
     private List<Team> teams = new ArrayList<>();
 
     @CreationTimestamp

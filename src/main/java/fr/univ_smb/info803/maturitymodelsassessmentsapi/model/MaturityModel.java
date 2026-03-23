@@ -34,10 +34,12 @@ public class MaturityModel {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "model_level", joinColumns = @JoinColumn(name = "model_id"))
     @Column(name = "level")
+    @Builder.Default
     private List<MaturityLevel> levels = new ArrayList<>();
 
     @OneToMany(mappedBy = "model", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("questionOrder ASC")
+    @Builder.Default
     private List<Question> questions = new ArrayList<>();
 
     @ManyToOne
