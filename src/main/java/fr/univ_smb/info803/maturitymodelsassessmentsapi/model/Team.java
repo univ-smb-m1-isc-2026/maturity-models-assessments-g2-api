@@ -22,14 +22,14 @@ public class Team {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "lead_id")
+    @JoinColumn(name = "lead_id") // FK
     private User lead;
 
     @ManyToMany
     @JoinTable(
-            name = "team_members",
-            joinColumns = @JoinColumn(name = "team_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            name = "team_members",                             // nom de la table de jointure créée en base
+            joinColumns = @JoinColumn(name = "team_id"),       // FK vers la table Team
+            inverseJoinColumns = @JoinColumn(name = "user_id") // FK vers la table User
     )
     private List<User> members = new ArrayList<>();
 

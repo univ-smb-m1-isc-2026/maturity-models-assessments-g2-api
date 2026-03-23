@@ -26,8 +26,9 @@ public class SessionResult {
     private User user;
 
     // une valeur par question
-    @ElementCollection
-    @CollectionTable(name = "result_values", joinColumns = @JoinColumn(name = "result_id"))
-    @Column(name = "value")
+    @ElementCollection // Ce n'est pas une entité, mais une collection de valeurs simples
+    @CollectionTable(name = "result_values",                // nom de la table créée
+            joinColumns = @JoinColumn(name = "result_id"))  // FK vers session_results
+    @Column(name = "value") // nom de la colonne qui stocke chaque entier
     private List<Integer> values = new ArrayList<>();
 }
