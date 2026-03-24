@@ -2,6 +2,7 @@ package fr.univ_smb.info803.maturitymodelsassessmentsapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.Role;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,9 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @ManyToMany(mappedBy = "members")
     @JsonIgnore
