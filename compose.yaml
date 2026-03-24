@@ -5,13 +5,20 @@ services:
       - "8080:8080"
     volumes:
       - ./logs:/logs
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
 
   db:
     image: postgres:16-alpine
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: mmag2
-      POSTGRES_USER: mmag2_root
-      POSTGRES_DB: mmmag234!
+      POSTGRES_USER: mmag2
+      POSTGRES_PASSWORD: mmag234!
+      POSTGRES_DB: db_mmag2
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
 
