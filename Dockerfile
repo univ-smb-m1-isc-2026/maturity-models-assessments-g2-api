@@ -11,7 +11,7 @@ FROM eclipse-temurin:25-jdk-alpine AS runtime
 
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
-COPY ./target/*.jar app.jar
+# COPY ./target/*.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
