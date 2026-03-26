@@ -17,6 +17,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    public Optional<User> getUserByEmail(final String email) { return userRepository.findByEmail(email); }
+
     public List<User> getUsersByRole(Role role) { return userRepository.findByRole(role); }
 
     public List<User> getUsersByIds(List<Long> ids) { return userRepository.findAllById(ids); }
