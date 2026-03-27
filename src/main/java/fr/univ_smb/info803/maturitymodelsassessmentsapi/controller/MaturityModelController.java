@@ -35,6 +35,7 @@ public class MaturityModelController {
             @AuthenticationPrincipal UserDetails userDetails) {
         User creator = (User) userDetails;
         model.setCreatedBy(creator);
+        log.info("Modèle '{}' créé par {}", model.getTitle(), creator.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(maturityModelService.saveModel(model));
     }
 
@@ -46,6 +47,9 @@ public class MaturityModelController {
     @GetMapping("/{id}")
     public ResponseEntity<MaturityModel> getModel(@PathVariable final long id){
         Optional<MaturityModel> model = maturityModelService.getMaturityModel(id);
+        if (model.isEmpty()) {
+            log.warn("Modèle id={} non trouvé", id);
+        }
         return model.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -82,8 +86,10 @@ public class MaturityModelController {
                 currentModel.setQuestions(model.getQuestions());
 
             maturityModelService.saveModel(currentModel);
+            log.info("Modèle id={} mis à jour", id);
             return ResponseEntity.ok(currentModel);
         }
+        log.warn("Tentative de mise à jour du modèle id={} non trouvé", id);
         return ResponseEntity.notFound().build();
     }
 
@@ -94,9 +100,12 @@ public class MaturityModelController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('PMO')")
     public ResponseEntity<Void> deleteModel(@PathVariable final Long id) {
-        if (maturityModelService.getMaturityModel(id).isEmpty())
+        if (maturityModelService.getMaturityModel(id).isEmpty()) {
+            log.warn("Tentative de suppression du modèle id={} non trouvé", id);
             return ResponseEntity.notFound().build();
+        }
         maturityModelService.deleteModel(id);
+        log.info("Modèle id={} supprimé", id);
         return ResponseEntity.noContent().build();
     }
 }

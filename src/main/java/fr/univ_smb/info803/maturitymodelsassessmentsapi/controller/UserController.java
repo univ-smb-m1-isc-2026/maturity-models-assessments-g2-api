@@ -32,6 +32,7 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        log.info("Création d'un nouvel utilisateur : {}", user.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(user));
     }
 
@@ -42,7 +43,11 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable final long id){
+        log.info("Récupération de l'utilisateur id={}", id);
         Optional<User> user = userService.getUser(id);
+        if (user.isEmpty()) {
+            log.warn("Utilisateur id={} non trouvé", id);
+        }
         return user.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -107,6 +112,7 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable final Long id) {
+        log.info("Suppression de l'utilisateur id={}", id);
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
