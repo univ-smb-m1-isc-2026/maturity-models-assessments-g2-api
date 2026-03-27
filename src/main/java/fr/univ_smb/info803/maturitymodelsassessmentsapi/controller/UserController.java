@@ -1,5 +1,6 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.controller;
 
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.UserResponse;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.Role;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.User;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.service.UserService;
@@ -7,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +23,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Create - Add a new user
@@ -86,7 +91,7 @@ public class UserController {
             if(user.getFirstName() != null)  currentUser.setFirstName(user.getFirstName());
             if(user.getLastName() != null)   currentUser.setLastName(user.getLastName());
             if(user.getEmail() != null)      currentUser.setEmail(user.getEmail());
-            if(user.getPassword() != null)   currentUser.setPassword(user.getPassword());
+            if(user.getPassword() != null)   currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
             if(user.getRole() != null)       currentUser.setRole(user.getRole());
             if(user.getStatus() != null)     currentUser.setStatus(user.getStatus());
 
@@ -104,5 +109,18 @@ public class UserController {
     public ResponseEntity<Void> deleteEmployee(@PathVariable final Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Read - Get the currently authenticated user
+     * @param userDetails the authenticated user injected by Spring Security
+     * @return The authenticated user object
+     */
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getMe(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = (User) userDetails;
+        return ResponseEntity.ok(new UserResponse(
+                user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole()
+        ));
     }
 }

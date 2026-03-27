@@ -19,10 +19,13 @@ public class MaturityModelService {
 
     public List<MaturityModel> findByCategory(MaturityCategory category){ return maturityModelRepository.findByCategory(category); }
 
-    public List<MaturityModel> findByCreatedById(Long userId){ return maturityModelRepository.findByCreatedById(userId); }
+    public List<MaturityModel> findByCreatedById(Long modelId){ return maturityModelRepository.findByCreatedById(modelId); }
 
     public Optional<MaturityModel> getMaturityModel(Long id){ return maturityModelRepository.findById(id); }
 
     public List<MaturityModel> getMaturityModels(){ return maturityModelRepository.findAll(); }
 
+    public void deleteModel(final Long modelId) { maturityModelRepository.deleteById(modelId); }
+
+    public MaturityModel saveModel(MaturityModel model){ return maturityModelRepository.save(model); }
 }
