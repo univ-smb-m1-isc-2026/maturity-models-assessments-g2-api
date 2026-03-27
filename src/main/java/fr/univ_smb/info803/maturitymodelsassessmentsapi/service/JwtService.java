@@ -1,5 +1,6 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.service;
 
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -42,8 +43,12 @@ public class JwtService {
      * Generate a token from a UserDetails object
      */
     public String generateToken(UserDetails userDetails) {
+        User user = (User) userDetails;
         return Jwts.builder()
-                .subject(userDetails.getUsername())
+                .subject(user.getUsername())
+                .claim("userId", user.getId())
+                .claim("role", user.getAuthorities()
+                        .iterator().next().getAuthority())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey())
@@ -64,6 +69,10 @@ public class JwtService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public Long extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", Long.class));
     }
 
     private Claims extractAllClaims(String token) {
