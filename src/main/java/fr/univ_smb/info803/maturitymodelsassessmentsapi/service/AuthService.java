@@ -3,7 +3,7 @@ package fr.univ_smb.info803.maturitymodelsassessmentsapi.service;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.AuthResponse;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.LoginRequest;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.RegisterRequest;
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.Status;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.Status;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.User;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

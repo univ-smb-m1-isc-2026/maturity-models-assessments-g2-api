@@ -79,9 +79,6 @@ public class MaturityModelController {
             if(model.getCategory() != null)      currentModel.setCategory(model.getCategory());
             if(model.getIcon() != null)   currentModel.setIcon(model.getIcon());
 
-            if(model.getLevels() != null && !model.getLevels().isEmpty())
-                currentModel.setLevels(model.getLevels());
-
             if(model.getQuestions() != null && !model.getQuestions().isEmpty())
                 currentModel.setQuestions(model.getQuestions());
 
