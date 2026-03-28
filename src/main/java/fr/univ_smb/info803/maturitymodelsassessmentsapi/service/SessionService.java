@@ -1,6 +1,6 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.service;
 
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.SessionStatus;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.SessionStatus;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.Session;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;

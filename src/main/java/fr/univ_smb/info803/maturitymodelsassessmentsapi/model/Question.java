@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "questions")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
@@ -25,4 +28,10 @@ public class Question {
     @JoinColumn(name = "model_id")
     @JsonIgnore
     private MaturityModel model;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("answerOrder ASC")
+    @Builder.Default
+    private List<QuestionAnswer> answers = new ArrayList<>();
+
 }

@@ -1,7 +1,7 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.controller;
 
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.UserResponse;
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.Role;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.Role;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.User;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.service.UserService;
 import lombok.RequiredArgsConstructor;

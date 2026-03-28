@@ -1,6 +1,5 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.model;
 
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.SessionStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.dto;
 
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.Role;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.Role;
 
 public record UserResponse(
         Long id,

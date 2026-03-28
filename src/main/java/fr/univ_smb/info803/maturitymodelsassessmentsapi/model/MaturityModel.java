@@ -1,7 +1,5 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.model;
 
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.MaturityCategory;
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.MaturityLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,14 +27,6 @@ public class MaturityModel {
 
     private String icon;
 
-    //Stocké comme tableau PostGreSQL
-    @ElementCollection
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "model_level", joinColumns = @JoinColumn(name = "model_id"))
-    @Column(name = "level")
-    @Builder.Default
-    private List<MaturityLevel> levels = new ArrayList<>();
-
     @OneToMany(mappedBy = "model", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("questionOrder ASC")
     @Builder.Default
@@ -48,5 +38,4 @@ public class MaturityModel {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
 }

@@ -1,6 +1,6 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.service;
 
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.enums.Role;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.Role;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.User;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
