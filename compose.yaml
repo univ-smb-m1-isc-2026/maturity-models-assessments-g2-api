@@ -13,9 +13,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: mmag2
-      POSTGRES_PASSWORD: mmag234!
-      POSTGRES_DB: db_mmag2
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
 

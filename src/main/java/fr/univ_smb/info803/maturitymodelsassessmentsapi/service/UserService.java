@@ -1,10 +1,12 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.service;
 
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.UserRequest;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.Role;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.User;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +37,17 @@ public class UserService {
 
     public User saveUser(User user){
         return userRepository.save(user);
+    }
+
+    public User createFromRequest(UserRequest request, PasswordEncoder encoder) {
+        return User.builder()
+                .firstName(request.firstName())
+                .lastName(request.lastName())
+                .email(request.email())
+                .password(encoder.encode(request.password()))
+                .role(request.role())
+                .status(request.status())
+                .build();
     }
 
 }

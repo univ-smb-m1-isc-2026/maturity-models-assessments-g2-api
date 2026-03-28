@@ -1,5 +1,6 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.controller;
 
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.UserRequest;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.UserResponse;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.Role;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.User;
@@ -31,9 +32,11 @@ public class UserController {
      * @return The user object saved
      */
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        log.info("Création d'un nouvel utilisateur : {}", user.getEmail());
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(user));
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest request) {
+        log.info("Création d'un nouvel utilisateur : {}", request.email());
+        User user = userService.createFromRequest(request, passwordEncoder);
+        User saved = userService.saveUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(saved));
     }
 
     /**
@@ -42,13 +45,10 @@ public class UserController {
      * @return An user object fulfilled
      */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable final long id){
+    public ResponseEntity<UserResponse> getUser(@PathVariable final long id) {
         log.info("Récupération de l'utilisateur id={}", id);
-        Optional<User> user = userService.getUser(id);
-        if (user.isEmpty()) {
-            log.warn("Utilisateur id={} non trouvé", id);
-        }
-        return user.map(ResponseEntity::ok)
+        return userService.getUser(id)
+                .map(u -> ResponseEntity.ok(toResponse(u)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -58,8 +58,10 @@ public class UserController {
      * @return A list of users
      */
     @GetMapping(params = "role")
-    public ResponseEntity<List<User>> getUsersByRole(@RequestParam Role role) {
-        return ResponseEntity.ok(userService.getUsersByRole(role));
+    public ResponseEntity<List<UserResponse>> getUsersByRole(@RequestParam Role role) {
+        List<UserResponse> list = userService.getUsersByRole(role)
+                .stream().map(this::toResponse).toList();
+        return ResponseEntity.ok(list);
     }
 
     /**
@@ -68,8 +70,10 @@ public class UserController {
      * @return A list of users
      */
     @PostMapping("/batch")
-    public ResponseEntity<List<User>> getUsersByIds(@RequestBody List<Long> ids) {
-        return ResponseEntity.ok(userService.getUsersByIds(ids));
+    public ResponseEntity<List<UserResponse>> getUsersByIds(@RequestBody List<Long> ids) {
+        List<UserResponse> list = userService.getUsersByIds(ids)
+                .stream().map(this::toResponse).toList();
+        return ResponseEntity.ok(list);
     }
 
     /**
@@ -77,33 +81,31 @@ public class UserController {
      * @return - A List object of User fulfilled
      */
     @GetMapping
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        return ResponseEntity.ok(userService.getUsers().stream().map(this::toResponse).toList());
     }
 
     /**
      * Update - Update an existing user
      * @param id - The id of the user to update
-     * @param user - The user object updated
+     * @param request - The user object updated
      * @return The updated user
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable final Long id, @RequestBody User user) {
-        Optional<User> u = userService.getUser(id);
-        if(u.isPresent()) {
-            User currentUser = u.get();
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable final Long id,
+            @RequestBody UserRequest request) {
 
-            if(user.getFirstName() != null)  currentUser.setFirstName(user.getFirstName());
-            if(user.getLastName() != null)   currentUser.setLastName(user.getLastName());
-            if(user.getEmail() != null)      currentUser.setEmail(user.getEmail());
-            if(user.getPassword() != null)   currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            if(user.getRole() != null)       currentUser.setRole(user.getRole());
-            if(user.getStatus() != null)     currentUser.setStatus(user.getStatus());
+        return userService.getUser(id).map(current -> {
+            if (request.firstName() != null) current.setFirstName(request.firstName());
+            if (request.lastName()  != null) current.setLastName(request.lastName());
+            if (request.email()     != null) current.setEmail(request.email());
+            if (request.password()  != null) current.setPassword(passwordEncoder.encode(request.password()));
+            if (request.role()      != null) current.setRole(request.role());
+            if (request.status()    != null) current.setStatus(request.status());
 
-            userService.saveUser(currentUser);
-            return ResponseEntity.ok(currentUser);
-        }
-        return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(toResponse(userService.saveUser(current)));
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     /**
@@ -111,7 +113,7 @@ public class UserController {
      * @param id - The id of the user to delete
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable final Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable final Long id) {
         log.info("Suppression de l'utilisateur id={}", id);
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
@@ -125,8 +127,16 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getMe(@AuthenticationPrincipal UserDetails userDetails) {
         User user = (User) userDetails;
-        return ResponseEntity.ok(new UserResponse(
-                user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole()
-        ));
+        return ResponseEntity.ok(toResponse(user));
+    }
+
+    private UserResponse toResponse(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
 }
