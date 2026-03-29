@@ -5,6 +5,9 @@ import fr.univ_smb.info803.maturitymodelsassessmentsapi.repository.InvitationRep
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,6 +21,13 @@ public class InvitationService {
 
     private final InvitationRepository invitationRepository;
     private final TeamRepository teamRepository;
+    private final JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String senderEmail;
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     /**
      * Create and send an invitation to an email address to join a team.
@@ -49,7 +59,7 @@ public class InvitationService {
 
         Invitation saved = invitationRepository.save(invitation);
 
-        log.info(">>> LIEN INVITATION : http://localhost:5173/register?token={}", saved.getToken());
+        sendInvitationEmail(saved.getEmail(), saved.getToken());
 
         return saved;
     }
@@ -98,5 +108,25 @@ public class InvitationService {
      */
     public Optional<Invitation> findByToken(String token) {
         return invitationRepository.findByToken(token);
+    }
+
+    /**
+     * Send an invitation email via Gmail SMTP with a registration link.
+     * @param to the recipient's email address
+     * @param token the UUID invitation token
+     */
+    private void sendInvitationEmail(String to, String token) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(senderEmail);
+        message.setTo(to);
+        message.setSubject("Invitation à rejoindre une équipe");
+        message.setText(
+                "Vous avez été invité à rejoindre une équipe sur Maturity Models App.\n\n"
+                        + "Cliquez sur le lien suivant pour créer votre compte :\n"
+                        + frontendUrl + "/register?token=" + token + "\n\n"
+                        + "Ce lien expire dans 7 jours."
+        );
+        mailSender.send(message);
+        log.info("Invitation email sent to {}", to);
     }
 }

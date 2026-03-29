@@ -1,6 +1,7 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.controller;
 
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.AuthResponse;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.InvitationResponse;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.LoginRequest;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.RegisterRequest;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.Invitation;
@@ -42,8 +43,18 @@ public class AuthController {
      * Returns the invitation details (email, team name) if the token is valid.
      */
     @GetMapping("/invite/{token}")
-    public ResponseEntity<Invitation> validateInvitation(@PathVariable String token) {
-        return ResponseEntity.ok(invitationService.validateToken(token));
+    public ResponseEntity<InvitationResponse> validateInvitation(@PathVariable String token) {
+        Invitation inv = invitationService.validateToken(token);
+        return ResponseEntity.ok(new InvitationResponse(
+                inv.getId(),
+                inv.getEmail(),
+                inv.getToken(),
+                inv.getTeam().getName(),
+                inv.getInvitedBy().getEmail(),
+                inv.getStatus(),
+                inv.getExpiresAt(),
+                inv.getCreatedAt()
+        ));
     }
 
     /**
