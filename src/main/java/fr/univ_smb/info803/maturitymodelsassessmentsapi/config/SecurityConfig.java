@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .cors(cors -> {}) // Delegates CORS config to WebConfig
                 .authorizeHttpRequests(auth -> auth
                         // auth/** publics routes (register/login)
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/error").permitAll()
                         // token required
                         .anyRequest().authenticated()
                 )
