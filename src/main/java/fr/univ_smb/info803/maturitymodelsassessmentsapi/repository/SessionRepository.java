@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SessionRepository extends JpaRepository<Session, String> {
+public interface SessionRepository extends JpaRepository<Session, Long> {
     List<Session> findByTeamId(Long teamId);
     List<Session> findByModelId(Long modelId);
     List<Session> findByStatus(SessionStatus status);
