@@ -23,11 +23,11 @@ public class SessionService {
 
     public List<Session> getByStatus(SessionStatus status){ return sessionRepository.findByStatus(status); }
 
-    public Optional<Session> getSession(final String id){ return sessionRepository.findById(id); }
+    public Optional<Session> getSession(final Long id){ return sessionRepository.findById(id); }
 
     public List<Session> getSessions(){ return sessionRepository.findAll(); }
 
-    public void deleteSession(final String id){ sessionRepository.deleteById(id); }
+    public void deleteSession(final Long id){ sessionRepository.deleteById(id); }
 
     public Session saveSession(Session session){ return sessionRepository.save(session); }
 
