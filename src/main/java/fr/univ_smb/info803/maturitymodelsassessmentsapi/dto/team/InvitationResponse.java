@@ -1,4 +1,4 @@
-package fr.univ_smb.info803.maturitymodelsassessmentsapi.dto;
+package fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.team;
 
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.InvitationStatus;
 

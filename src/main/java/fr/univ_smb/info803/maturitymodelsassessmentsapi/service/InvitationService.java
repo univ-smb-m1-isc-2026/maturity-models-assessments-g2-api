@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -108,6 +109,18 @@ public class InvitationService {
      */
     public Optional<Invitation> findByToken(String token) {
         return invitationRepository.findByToken(token);
+    }
+
+    /**
+     * Retrieve all invitations for a given team, optionally filtered by status.
+     * Used to display the team roster with pending invitees.
+     * @param teamId the id of the team
+     * @return all invitations linked to that team
+     */
+    public List<Invitation> getInvitationsByTeam(Long teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Équipe introuvable"));
+        return invitationRepository.findByTeam(team);
     }
 
     /**

@@ -1,8 +1,8 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.service;
 
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.AuthResponse;
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.LoginRequest;
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.RegisterRequest;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.auth.AuthResponse;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.auth.LoginRequest;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.auth.RegisterRequest;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.*;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.repository.TeamRepository;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.repository.UserRepository;
