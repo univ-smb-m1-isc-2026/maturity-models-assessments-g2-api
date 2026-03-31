@@ -1,11 +1,17 @@
 package fr.univ_smb.info803.maturitymodelsassessmentsapi.controller;
 
-import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.*;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.model.*;
+import fr.univ_smb.info803.maturitymodelsassessmentsapi.dto.user.UserResponse;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.MaturityModel;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.Question;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.QuestionAnswer;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.model.User;
 import fr.univ_smb.info803.maturitymodelsassessmentsapi.service.MaturityModelService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,15 +27,17 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/models")
+@Tag(name = "Maturity Models", description = "Gestion des modèles de maturité et de leurs questions")
+@SecurityRequirement(name = "bearerAuth")
 public class MaturityModelController {
 
     private final MaturityModelService maturityModelService;
 
-    /**
-     * Create - Add a new maturity model
-     * @param request an object MaturityModel
-     * @return The model object saved
-     */
+    @Operation(summary = "Créer un modèle", description = "Crée un modèle de maturité avec ses questions et réponses possibles (1 à 5). Rôle requis : PMO.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Modèle créé"),
+            @ApiResponse(responseCode = "403", description = "Accès refusé")
+    })
     @PostMapping
     @PreAuthorize("hasRole('PMO')")
     public ResponseEntity<MaturityModelResponse> createModel(
@@ -53,11 +61,11 @@ public class MaturityModelController {
                 .body(toResponse(maturityModelService.saveModel(model)));
     }
 
-    /**
-     * Read - Get one model
-     * @param id is the id of the model
-     * @return A MaturityModel object fulfilled
-     */
+    @Operation(summary = "Obtenir un modèle par id", description = "Retourne le modèle avec toutes ses questions et réponses possibles.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Modèle trouvé"),
+            @ApiResponse(responseCode = "404", description = "Modèle introuvable")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<MaturityModelResponse> getModel(@PathVariable final long id) {
         return maturityModelService.getMaturityModel(id)
@@ -65,10 +73,8 @@ public class MaturityModelController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Read - Get all models
-     * @return - A List object of MaturityModel fulfilled
-     */
+    @Operation(summary = "Lister tous les modèles", description = "Accessible à tous les utilisateurs authentifiés.")
+    @ApiResponse(responseCode = "200", description = "Liste des modèles")
     @GetMapping
     public ResponseEntity<List<MaturityModelResponse>> getModels() {
         return ResponseEntity.ok(
@@ -76,12 +82,12 @@ public class MaturityModelController {
         );
     }
 
-    /**
-     * Update - Update an existing model
-     * @param id - The id of the model to update
-     * @param request - The model object updated
-     * @return The updated model
-     */
+    @Operation(summary = "Modifier un modèle", description = "Met à jour le titre, la description, la catégorie, l'icône ou les questions. Rôle requis : PMO.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Modèle mis à jour"),
+            @ApiResponse(responseCode = "403", description = "Accès refusé"),
+            @ApiResponse(responseCode = "404", description = "Modèle introuvable")
+    })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('PMO')")
     public ResponseEntity<MaturityModelResponse> updateModel(
@@ -107,10 +113,12 @@ public class MaturityModelController {
         });
     }
 
-    /**
-     * Delete - Delete a model
-     * @param id - The id of the model to delete
-     */
+    @Operation(summary = "Supprimer un modèle", description = "Rôle requis : PMO.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Modèle supprimé"),
+            @ApiResponse(responseCode = "403", description = "Accès refusé"),
+            @ApiResponse(responseCode = "404", description = "Modèle introuvable")
+    })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('PMO')")
     public ResponseEntity<Void> deleteModel(@PathVariable final Long id) {
