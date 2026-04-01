@@ -4,6 +4,7 @@ import java.util.List;
 
 public record SessionResultResponse(
         Long id,
+        Long idSession,
         Long userId,
         String firstName,
         String lastName,
