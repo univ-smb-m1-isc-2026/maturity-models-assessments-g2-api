@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface SessionResultRepository extends JpaRepository<SessionResult, Long> {
     List<SessionResult> findBySessionId(Long sessionId);
     Optional<SessionResult> findBySessionIdAndUserId(Long sessionId, Long userId);
+    void deleteBySessionId(Long sessionId);
 }

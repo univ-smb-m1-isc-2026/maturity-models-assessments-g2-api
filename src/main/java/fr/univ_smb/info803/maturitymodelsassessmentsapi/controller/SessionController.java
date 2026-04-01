@@ -85,13 +85,12 @@ public class SessionController {
         );
     }
 
-    @Operation(summary = "Obtenir une session par id", description = "Rôles requis : PMO ou TEAM_LEAD.")
+    @Operation(summary = "Obtenir une session par id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Session trouvée"),
             @ApiResponse(responseCode = "404", description = "Session introuvable")
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('PMO', 'TEAM_LEAD')")
     public ResponseEntity<SessionResponse> getSession(@PathVariable final Long id) {
         return sessionService.getSession(id)
                 .map(s -> ResponseEntity.ok(toResponse(s)))
