@@ -125,6 +125,7 @@ public class SessionResultController {
     private SessionResultResponse toResponse(SessionResult r) {
         return new SessionResultResponse(
                 r.getId(),
+                r.getSession().getId(),
                 r.getUser().getId(),
                 r.getUser().getFirstName(),
                 r.getUser().getLastName(),
