@@ -1,17 +1,6 @@
-FROM eclipse-temurin:25-jdk-alpine AS builder
+FROM eclipse-temurin:25-jre-alpine
 
-WORKDIR /app
-COPY mvnw pom.xml ./
-COPY .mvn .mvn
-RUN ./mvnw dependency:go-offline
-COPY src ./src
-RUN ./mvnw package -DskipTests
-
-FROM eclipse-temurin:25-jdk-alpine AS runtime
-
-WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
-# COPY ./target/*.jar app.jar
+COPY ./target/maturity-models-assessments-g2-api-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-XX:InitialRAMPercentage=50", "-XX:MaxRAMPercentage=70", "-jar", "app.jar"]
