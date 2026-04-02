@@ -8,5 +8,5 @@ public record SessionResultResponse(
         Long userId,
         String firstName,
         String lastName,
-        List<String> values
+        List<Integer> values
 ) {}
