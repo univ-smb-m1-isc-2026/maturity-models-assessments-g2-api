@@ -100,7 +100,6 @@ public class SessionController {
     @Operation(summary = "Sessions par équipe", description = "Retourne toutes les sessions d'une équipe. Rôles requis : PMO ou TEAM_LEAD.")
     @ApiResponse(responseCode = "200", description = "Liste des sessions de l'équipe")
     @GetMapping("/by-team/{teamId}")
-    @PreAuthorize("hasAnyRole('PMO', 'TEAM_LEAD')")
     public ResponseEntity<List<SessionResponse>> getSessionsByTeam(@PathVariable final Long teamId) {
         return ResponseEntity.ok(
                 sessionService.getByTeamId(teamId).stream().map(this::toResponse).toList()
