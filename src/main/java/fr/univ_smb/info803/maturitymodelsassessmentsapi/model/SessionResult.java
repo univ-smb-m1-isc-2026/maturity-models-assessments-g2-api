@@ -31,5 +31,5 @@ public class SessionResult {
             joinColumns = @JoinColumn(name = "result_id"))  // FK vers session_results
     @Column(name = "value") // nom de la colonne qui stocke chaque entier
     @Builder.Default
-    private List<Integer> values = new ArrayList<>();
+    private List<String> values = new ArrayList<>();
 }
