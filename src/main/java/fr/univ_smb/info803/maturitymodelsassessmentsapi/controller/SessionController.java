@@ -66,7 +66,7 @@ public class SessionController {
                 .name(request.name())
                 .model(optionalModel.get())
                 .team(optionalTeam.get())
-                .status(SessionStatus.PENDING)
+                .status(SessionStatus.OPEN)
                 .deadline(request.deadline())
                 .build();
 
