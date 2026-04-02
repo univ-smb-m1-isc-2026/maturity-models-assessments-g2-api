@@ -13,7 +13,6 @@
 - [Présentation](#présentation)
 - [Stack technique](#stack-technique)
 - [Architecture du projet](#architecture-du-projet)
-- [Modèle de données](#modèle-de-données)
 - [Rôles et permissions](#rôles-et-permissions)
 - [Endpoints API](#endpoints-api)
 - [Authentification](#authentification)
@@ -48,6 +47,8 @@ Ce projet constitue la partie **back-end** de l'application d'évaluation de mat
 | Build | Maven (Wrapper inclus) |
 | Containerisation | Docker + Docker Compose |
 | Réduction boilerplate | Lombok |
+| Tests | JUnit 5 + Mockito |
+| Couverture de code | JaCoCo |
 
 ---
 
@@ -80,41 +81,6 @@ src/main/java/fr/univ_smb/info803/maturitymodelsassessmentsapi/
 │   └── User.java
 ├── repository/                  # Interfaces Spring Data JPA
 └── service/                     # Logique métier
-```
-
----
-
-## Modèle de données
-
-```
-MaturityModel
-  ├── title, description, category, icon
-  ├── createdBy → User (PMO)
-  └── questions[]
-        ├── text, questionOrder
-        └── answers[]
-              └── value (1–5), answerOrder
-
-Team
-  ├── name
-  ├── lead → User (TEAM_LEAD)
-  └── members[] → User (TEAM_MEMBER)
-
-Session
-  ├── name, deadline
-  ├── status : PENDING | OPEN | CLOSED
-  ├── model → MaturityModel
-  └── team → Team
-
-SessionResult
-  ├── session → Session
-  └── user → User
-
-Invitation
-  ├── email, token, expiresAt
-  ├── status : PENDING | ACCEPTED | EXPIRED
-  ├── team → Team
-  └── invitedBy → User
 ```
 
 ---
@@ -191,6 +157,13 @@ La documentation interactive (Swagger UI) est disponible à : `http://localhost:
 | `POST` | `/api/sessions` | `TEAM_LEAD` | Crée une session (status initial : `PENDING`) |
 | `DELETE` | `/api/sessions/{id}` | `TEAM_LEAD` (owner) | Supprime une session |
 
+### Résultats de session — `/api/sessions/{sessionId}/results`
+
+| Méthode | Endpoint | Accès | Description |
+|---------|----------|-------|-------------|
+| `POST` | `/api/sessions/{sessionId}/results` | `TEAM_MEMBER` | Soumet ses réponses (1 valeur par question, dans l'ordre). La session doit être `OPEN`. Une seule soumission par membre par session. |
+| `GET` | `/api/sessions/{sessionId}/results` | `TEAM_MEMBER`, `TEAM_LEAD`, `PMO` | Retourne les réponses de tous les membres (pour construire le diagramme radar). |
+| `GET` | `/api/sessions/{sessionId}/results/me` | `TEAM_MEMBER` | Retourne la soumission du membre connecté pour cette session. |
 ---
 
 ## Authentification
@@ -230,8 +203,11 @@ INVITÉ     →  GET /api/auth/invite/{token}    →  Validation du token
 ### Prérequis
 
 - Docker et Docker Compose
+- Java 25 + Maven (ou utiliser le wrapper `./mvnw` inclus)
 
 ### Lancement avec Docker Compose
+
+Le Dockerfile embarque uniquement le JAR compilé — il faut donc d'abord **compiler le projet** avant de lancer Docker Compose.
 
 ```bash
 # Cloner le dépôt
@@ -242,11 +218,19 @@ cd maturity-models-assessments-g2-api
 cp .env.example .env
 # Remplir GMAIL_USERNAME et GMAIL_APP_PASSWORD dans .env
 
-# Lancer l'application et la base de données
+# 1. Compiler et packager le JAR
+./mvnw clean package -DskipTests
+
+# 2. Lancer l'application et la base de données
 docker compose up --build
 ```
 
 L'API sera disponible sur `http://localhost:8080`.
+
+> **Redéploiement** : à chaque modification du code, relancer les deux commandes :
+> ```bash
+> ./mvnw clean package -DskipTests && docker compose up --build
+> ```
 
 ### Lancement en développement (sans Docker)
 
@@ -256,7 +240,6 @@ L'API sera disponible sur `http://localhost:8080`.
 
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
-
 ---
 
 ## Variables d'environnement
@@ -275,7 +258,7 @@ L'API sera disponible sur `http://localhost:8080`.
 
 Un pipeline GitHub Actions est configuré (`.github/workflows/build-pipeline.yml`). Il se déclenche à chaque push sur `main` et effectue les étapes suivantes :
 
-1. **Build Maven** — compilation et packaging du JAR (sans tests)
+1. **Build Maven** — compilation et packaging du JAR (avec tests)
 2. **Build & Push Docker** — construction de l'image et publication sur GitHub Container Registry (`ghcr.io`)
 
 L'image produite est disponible à : `ghcr.io/<owner>/<repo>:latest`
